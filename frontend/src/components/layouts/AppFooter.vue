@@ -16,7 +16,8 @@ export default {
 <style scoped>
 footer {
   display: block;
-  position: absolute;
+  position: fixed;
+  margin-top: 250px;
   bottom: 0;
   width: 100%;
   height: 60px;

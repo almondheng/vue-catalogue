@@ -8,9 +8,8 @@
 
         <form @submit="checkForm">
           <div class="mb-3">
-            <label for="inputEmail" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp" v-model="email">
-            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            <label for="inputUsername" class="form-label">Username</label>
+            <input type="text" class="form-control" id="inputUsername" v-model="username">
           </div>
 
           <div class="mb-3">
@@ -34,28 +33,42 @@
 </template>
 
 <script>
+import api from '@/api'
+
 export default {
+  inject: ['global'],
   data () {
     return {
-      email: '',
+      username: '',
       password: '',
       errors: []
     }
   },
   methods: {
     checkForm (e) {
-      this.$router.push('/catalogue')
-      if (this.email && this.password) {
-        return true
-      }
-
       this.errors = []
 
-      if (!this.email) {
-        this.errors.push('Email required.')
+      if (!this.username) {
+        this.errors.push('Username required.')
       }
       if (!this.password) {
         this.errors.push('Password required.')
+      }
+
+      if (this.username && this.password) {
+        const payload = {
+          username: this.username,
+          password: this.password
+        }
+        api.auth(payload)
+          .then(res => {
+            this.global.login(res.data)
+            this.$router.push('/catalogue')
+          })
+          .catch(err => {
+            this.errors.push('Login failed.')
+            console.log(err)
+          })
       }
 
       e.preventDefault()
