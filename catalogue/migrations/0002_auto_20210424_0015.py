@@ -2,13 +2,20 @@
 
 from django.db import migrations
 from django.contrib.auth.hashers import make_password
+import random
+import decimal
 
-def populate_users(apps, schema_editor):
+def populate_db(apps, schema_editor):
     User = apps.get_model('catalogue', 'User')
     admin = User(username="admin", password=make_password("admin"), email="admin@catalogue.com", is_superuser=True, is_staff=True)
     admin.save()
     user = User(username="user", password=make_password("catalogue123"), email="user@catalogue.com")
     user.save()
+
+    Product = apps.get_model('catalogue', 'Product')
+    for i in range(50):
+        product = Product(name=f'{i+1}-Product', price=f'{decimal.Decimal(random.randrange(155, 38967))/100}')
+        product.save()
 
 class Migration(migrations.Migration):
 
@@ -17,5 +24,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(populate_users),
+        migrations.RunPython(populate_db),
     ]
