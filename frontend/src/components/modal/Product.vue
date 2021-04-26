@@ -32,14 +32,16 @@ import { ref, toRef, onMounted, watch } from 'vue'
 
 export default {
   props: {
+    // eslint-disable-next-line vue/require-default-prop
     selected: Object
   },
+  emits: ['save'],
   setup (props) {
     const product = ref({})
     const selectedRef = toRef(props, 'selected')
 
     const getProduct = () => {
-      product.value = selectedRef.value
+      product.value = {...selectedRef.value}
     }
 
     onMounted(getProduct)
@@ -54,8 +56,7 @@ export default {
   methods: {
     onClickSave (e) {
       if (this.product.name && this.product.price >= 0) {
-        const {id, ...input} = this.product
-        this.$emit('save', id ? this.product : input) // omit id if not exist
+        this.$emit('save', this.product) 
       }
       
       e.preventDefault()

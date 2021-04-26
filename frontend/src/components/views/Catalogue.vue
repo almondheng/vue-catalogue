@@ -46,10 +46,11 @@
 </template>
 
 <script>
-import { ref, onMounted  } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 import { Modal } from 'bootstrap'
 import Product from '@/components/modal/Product.vue'
 import Popup from '@/components/modal/Popup.vue'
+import api from '@/api'
 
 export default {
   components: { Product, Popup },
@@ -57,10 +58,17 @@ export default {
   setup (props) {
     const products = ref([])
     const selected = ref({})
+    const global = inject('global')
 
     const getProducts = async () => {
-      const dummy = [{id: '1', name: 'test', price: 2}, {id: '2', name: 'sample', price: 5}]
-      products.value = await dummy  // TODO: replace with api
+      // const dummy = [{id: '1', name: 'test', price: 2}, {id: '2', name: 'sample', price: 5}]
+      const token = await global.inspectToken()
+      try {
+        const res = await api.listProduct(token)
+        products.value = res.data.results
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     const getSelected = product => {
@@ -78,13 +86,26 @@ export default {
   },
   methods: {
     async onSave (product) {
-      // TODO: add/edit api
+      const {id, ...input} = product
+      const payload = input
+      const token = await this.global.inspectToken()
+      try {
+        if (id) await api.updateProduct(id, payload, token)
+        else await api.addProduct(payload, token)
+      } catch (error) {
+        console.log(error)
+      }
       await this.getProducts()
       var modal = Modal.getInstance(document.getElementById('productModal'))
       modal.toggle()
     },
     async onDelete () {
-      // TODO: delete api
+      const token = await this.global.inspectToken()
+      try {
+        await api.deleteProduct(this.selected.id, token)
+      } catch (error) {
+        console.log(error)
+      }
       await this.getProducts()
       var modal = Modal.getInstance(document.getElementById('popupModal'))
       modal.toggle()
