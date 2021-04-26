@@ -28,9 +28,16 @@ const inspectToken = async function () {
       state.isLogin = 1
       return true
     } else if (refresh_exp > Date.now()/1000) {
-      const tokens = await api.authRefresh(tokens.refresh)
-      updateToken(tokens)
-      return true
+      try {
+        const payload = {refresh: tokens.refresh}
+        const response = await api.authRefresh(payload)
+        tokens.access = response.data.newAccess
+        updateToken(tokens)
+        return true
+      } catch (error) {
+        console.log(error)
+        return false
+      }
     } else {
       return false
     }

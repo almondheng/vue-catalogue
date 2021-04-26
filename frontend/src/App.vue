@@ -11,8 +11,7 @@ import AppFooter from '@/components/layouts/AppFooter.vue'
 import global from './global'
 
 const router = useRouter()
-if (global.inspectToken()) router.push('/catalogue')
-else router.push('/')
+global.inspectToken().then(res => res ? router.push('/catalogue') : router.push('/'))
 
 // This starter template is using Vue 3 experimental <script setup> SFCs
 // Check out https://github.com/vuejs/rfcs/blob/script-setup-2/active-rfcs/0000-script-setup.md
