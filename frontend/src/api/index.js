@@ -11,8 +11,8 @@ const authRefresh = async payload => {
   return await axios.post(baseURL + '/token/refresh/', payload)
 }
 
-const listProduct = async token => {
-  return await axios.get(baseURL + '/products/', {headers: {'Authorization': 'Bearer ' + token}})
+const listProduct = async (params, token) => {
+  return await axios.get(baseURL + '/products/', {params, headers: {'Authorization': 'Bearer ' + token}})
 }
 
 const addProduct = async (payload, token) => {

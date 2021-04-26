@@ -24,8 +24,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(product, index) in products" :key="product.id">
-            <th scope="row">{{index+1}}</th>
+          <tr v-for="(product, index) in products.results" :key="product.id">
+            <th scope="row">{{(page-1)*10+index+1}}</th>
             <td>{{product.name}}</td>
             <td>$ {{product.price}}</td>
             <td v-if="global.state.isStaff" class="text-center">
@@ -42,30 +42,37 @@
         </tbody>
       </table>
     </div>
+    <nav class="d-flex justify-content-end">
+      <pagination v-model="page" :records="products.count" :per-page="10" />
+    </nav>
   </div>
 </template>
 
 <script>
-import { ref, onMounted, inject } from 'vue'
+import { ref, inject, watch } from 'vue'
 import { Modal } from 'bootstrap'
+import Pagination from 'v-pagination-3';
+
 import Product from '@/components/modal/Product.vue'
 import Popup from '@/components/modal/Popup.vue'
 import api from '@/api'
 
 export default {
-  components: { Product, Popup },
-  inject: ['global'],
+  components: { Product, Popup, Pagination },
   setup (props) {
-    const products = ref([])
+    const products = ref({count: NaN})
     const selected = ref({})
+    const page = ref(1)
     const global = inject('global')
 
     const getProducts = async () => {
-      // const dummy = [{id: '1', name: 'test', price: 2}, {id: '2', name: 'sample', price: 5}]
+      const params = {
+        page: page.value
+      }
       const token = await global.inspectToken()
       try {
-        const res = await api.listProduct(token)
-        products.value = res.data.results
+        const res = await api.listProduct(params, token)
+        products.value = res.data
       } catch (error) {
         console.log(error)
       }
@@ -74,12 +81,16 @@ export default {
     const getSelected = product => {
       selected.value = product || {name: '', price: 0}
     }
+
+    watch(page, getProducts)
     
-    onMounted(getProducts)
+    getProducts()
 
     return {
       products,
       selected,
+      page,
+      global,
       getProducts,
       getSelected
     }
