@@ -1,7 +1,10 @@
 <template>
   <footer>
     <div class="container text-center">
-      <a class="link-primary" href="https://github.com/almondheng/vue-catalogue">Github Repo</a>
+      <a
+        class="link-primary"
+        href="https://github.com/almondheng/vue-catalogue"
+      >Github Repo</a>
       <span>by Almond Heng</span>
     </div>
   </footer>

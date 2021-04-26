@@ -1,26 +1,75 @@
 <template>
-  <div class="modal fade" id="productModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="productLabel" aria-hidden="true">
+  <div
+    id="productModal"
+    class="modal fade"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="productLabel"
+    aria-hidden="true"
+  >
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="productLabel">Product</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h5
+            id="productLabel"
+            class="modal-title"
+          >
+            Product
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          />
         </div>
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="inputName" class="form-label">Name</label>
-              <input type="text" v-model="product.name" class="form-control" id="inputName">
+              <label
+                for="inputName"
+                class="form-label"
+              >Name</label>
+              <input
+                id="inputName"
+                v-model="product.name"
+                type="text"
+                class="form-control"
+              >
             </div>
             <div class="mb-3">
-              <label for="inputPrice" class="form-label">Price</label>
-              <input type="number" min="0" step="0.01" required v-model="product.price" class="form-control" id="inputPrice">
+              <label
+                for="inputPrice"
+                class="form-label"
+              >Price</label>
+              <input
+                id="inputPrice"
+                v-model="product.price"
+                type="number"
+                min="0"
+                step="0.01"
+                required
+                class="form-control"
+              >
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" @click="onClickSave" class="btn btn-primary">Save</button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            @click="onClickSave"
+          >
+            Save
+          </button>
         </div>
       </div>
     </div>
@@ -32,8 +81,10 @@ import { ref, toRef, onMounted, watch } from 'vue'
 
 export default {
   props: {
-    // eslint-disable-next-line vue/require-default-prop
-    selected: Object
+    selected: {
+      type: Object,
+      required: true
+    }
   },
   emits: ['save'],
   setup (props) {
