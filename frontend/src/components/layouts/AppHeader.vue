@@ -2,7 +2,10 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-dark py-3">
     <div class="container-fluid">
       <span class="navbar-brand mb-0 h1 text-white">Product Catalogue</span>
-      <button v-if="global.state.isLogin" class="btn btn-outline-light d-flex" @click="onClickLogout">Logout</button>
+      <div v-if="global.state.isLogin" class="d-flex">
+        <span class="align-self-center text-white px-3">{{global.state.isStaff ? 'Admin' : 'User'}}</span>
+        <button class="btn btn-outline-light" @click="onClickLogout">Logout</button>
+      </div>
     </div>
   </nav>
 </template>
