@@ -1,4 +1,5 @@
 # vue-catalogue
+> Demo of a product catalogue built with Vue 3 and Django
 ---
 
 ## *Backend*
@@ -9,7 +10,7 @@
 - PIP
 - venv
 
-### Installation
+### Installation & Usage
 
 ``` bash
 # create virtual environment
@@ -35,7 +36,7 @@ python manage.py runserver
 ### Required
 - Node.js >=12.0.0
 
-### Installation
+### Installation & Usage
 
 ``` bash
 # change to frontend directory 
@@ -63,3 +64,5 @@ password: admin
 username: user
 password: catalogue123
 ```
+
+<sup>* Credentials can be modified at migrations or using [django-admin](https://docs.djangoproject.com/en/1.8/intro/tutorial02/).</sup>
