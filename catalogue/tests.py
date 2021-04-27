@@ -9,15 +9,16 @@ from vue_catalogue import settings
 # Create your tests here.
 class ProductTestCase(TestCase):
     def setUp(self):
-        self.admin = User.objects.create_superuser('admin', 'admin@admin.com', 'adminTestPassword')
+        self.admin = User.objects.create_superuser('admin_user', 'admin@admin.com', 'adminTestPassword')
         self.normal_user = User.objects.create_user('normal_user', 'normal_user@gmail.com', 'normalTestPassword')
         self.client = APIClient()
 
-        for i in range(20):
-            Product.objects.create(
-                name=f'{i}-Product',
-                price=f'{decimal.Decimal(random.randrange(155, 38967))/100}'
-            )
+        # uncomment if data is not populated in migration
+        # for i in range(50):
+        #     Product.objects.create(
+        #         name=f'{i}-Product',
+        #         price=f'{decimal.Decimal(random.randrange(155, 38967))/100}'
+        #     )
 
     def test_cannot_list_products_without_auth(self):
         response = self.client.get('/api/products/')
@@ -28,7 +29,7 @@ class ProductTestCase(TestCase):
         self.client.force_authenticate(self.admin)
         response = self.client.get('/api/products/')
         self.assertContains(response, 'count')
-        self.assertEqual(response.data['count'], 20)
+        self.assertEqual(response.data['count'], 50)
 
     def test_admin_can_list_paginated_products(self):
         self.client.force_authenticate(self.admin)
@@ -59,7 +60,7 @@ class ProductTestCase(TestCase):
         self.client.force_authenticate(self.admin)
         response = self.client.post('/api/products/', {'name': 'product test', 'price': 25.00}, format='json')
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.json()['id'], 21)
+        self.assertEqual(response.json()['id'], 51)
 
         response = self.client.get('/api/products/21/')
         self.assertEqual(response.status_code, 200)
@@ -89,7 +90,7 @@ class ProductTestCase(TestCase):
         self.client.force_authenticate(self.normal_user)
         response = self.client.get('/api/products/')
         self.assertContains(response, 'count')
-        self.assertEqual(response.data['count'], 20)
+        self.assertEqual(response.data['count'], 50)
 
     def test_normal_user_can_list_paginated_products(self):
         self.client.force_authenticate(self.normal_user)
